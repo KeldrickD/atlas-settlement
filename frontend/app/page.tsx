@@ -37,6 +37,7 @@ type SettlementRow = {
 const ANVIL_SELLER = "0x70997970C51812dc3A010C7d01b50e0d17dc79C8";
 const ANVIL_BUYER = "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC";
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://127.0.0.1:8080";
+const HAS_CONFIGURED_API_BASE_URL = Boolean(process.env.NEXT_PUBLIC_API_BASE_URL);
 
 const initialSettlements: SettlementRow[] = [
   { ref: "DVP-1049", buyer: "0x8E2...14C", seller: "0xA45...91F", asset: "ATF", amount: "125,000", payment: "$1,247,500", status: "Ready" },
@@ -70,6 +71,24 @@ export default function Dashboard() {
     const tradeReference = `DVP-${Date.now().toString().slice(-6)}`;
 
     try {
+      if (!HAS_CONFIGURED_API_BASE_URL && !isLocalBrowserRuntime()) {
+        setSettlements((current) => [
+          {
+            ref: tradeReference,
+            buyer: compactAddress(ANVIL_BUYER),
+            seller: compactAddress(ANVIL_SELLER),
+            asset: "ATF",
+            amount: "10",
+            payment: "$1000",
+            status: "LOCAL_PREVIEW",
+            txHash: "local-only"
+          },
+          ...current
+        ]);
+        setLiveMessage("Cloud preview only. Run the local Anvil flow in the README for a real on-chain transaction.");
+        return;
+      }
+
       const response = await fetch(`${API_BASE_URL}/settlements/create`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -261,4 +280,11 @@ function compactAddress(value: string) {
     return value;
   }
   return `${value.slice(0, 6)}...${value.slice(-4)}`;
+}
+
+function isLocalBrowserRuntime() {
+  if (typeof window === "undefined") {
+    return true;
+  }
+  return ["localhost", "127.0.0.1", "::1"].includes(window.location.hostname);
 }

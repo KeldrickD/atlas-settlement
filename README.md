@@ -129,6 +129,8 @@ Dashboard surfaces:
 
 The dashboard includes a `New DVP` button that calls the Spring Boot backend and prepends the returned on-chain settlement to the settlement queue.
 
+When deployed as a public Vercel preview, the dashboard is frontend-only. The `New DVP` button creates a clearly marked `LOCAL_PREVIEW` row unless `NEXT_PUBLIC_API_BASE_URL` points to a public backend. The real on-chain flow is the local Anvil + Spring Boot flow documented below.
+
 ## Repository Layout
 
 ```text
@@ -254,6 +256,25 @@ POST http://127.0.0.1:8080/settlements/create
 ```
 
 The backend sends a real `createSettlement` transaction to local Anvil and returns a chain transaction hash. The new settlement appears at the top of the dashboard settlement queue.
+
+### Frontend-Only Vercel Preview
+
+Deploy the `frontend` directory to Vercel as a visual portfolio preview. This is useful for sharing the institutional dashboard in an interview, but it does not run Anvil or the Spring Boot backend.
+
+Recommended Vercel settings:
+
+```text
+Root Directory: frontend
+Build Command: npm run build
+Install Command: npm install
+Output Directory: .next
+```
+
+For a real deployed settlement flow, deploy the Spring Boot API separately and set:
+
+```text
+NEXT_PUBLIC_API_BASE_URL=https://your-backend.example.com
+```
 
 You can also test the endpoint directly:
 
