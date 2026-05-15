@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: atlas-settlement-api
+  datasource:
+    url: ${DATABASE_URL:jdbc:h2:mem:atlas;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE}
+    username: ${DATABASE_USERNAME:sa}
+    password: ${DATABASE_PASSWORD:}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+
+atlas:
+  chain:
+    rpc-url: ${ATLAS_RPC_URL:http://127.0.0.1:8545}
+    compliance-registry: ${ATLAS_COMPLIANCE_REGISTRY:0x0000000000000000000000000000000000000000}
+    settlement-escrow: ${ATLAS_SETTLEMENT_ESCROW:0x0000000000000000000000000000000000000000}
+    deployment-file: ${ATLAS_DEPLOYMENT_FILE:../deployments/anvil.json}
+    seller-private-key: ${ATLAS_SELLER_PRIVATE_KEY:0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d}
+    chain-id: ${ATLAS_CHAIN_ID:31337}
+    asset-decimals: ${ATLAS_ASSET_DECIMALS:18}
+    payment-decimals: ${ATLAS_PAYMENT_DECIMALS:6}

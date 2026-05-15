@@ -1,0 +1,16 @@
+out/
+cache/
+broadcast/
+broadcast-local/
+node_modules/
+.next/
+target/
+.env
+.env.local
+dist/
+coverage/
+coverage.json
+*.log
+.tools/
+deployments/*.json
+!deployments/.gitkeep
