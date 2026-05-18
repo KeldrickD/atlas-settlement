@@ -1,0 +1,15 @@
+{
+  "redirects": [
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "sales.theapplianceinc.com"
+        }
+      ],
+      "destination": "https://appliance-intake-demo.vercel.app/home#pricing",
+      "permanent": false
+    }
+  ]
+}
